@@ -1,5 +1,5 @@
-import React, { useState, useCallback,useEffect } from 'react';
-import ReactFlow, { addEdge, useNodesState, useEdgesState, Controls } from 'react-flow-renderer';
+import React, { useState, useCallback, useEffect } from 'react';
+import ReactFlow, { useNodesState, useEdgesState, Controls } from 'react-flow-renderer';
 import ProductNode from './Node';
 
 const nodeTypes = {
@@ -8,10 +8,12 @@ const nodeTypes = {
 
 const FlowEditor = ({ selectedProduct }) => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange, addEdge] = useEdgesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
+    (params) => {
+      setEdges((eds) => [...eds, { id: `e-${params.source}-${params.target}`, ...params }]);
+    },
     [setEdges]
   );
 
